@@ -1,0 +1,12 @@
+{
+  "name": "dv-ajax-modal",
+  "version": "0.5.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/druidvav/js-ajax-modal.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "homepage": "https://github.com/druidvav/js-ajax-modal"
+}
