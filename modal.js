@@ -1,10 +1,9 @@
-class DvAjaxModal {
-    constructor(bootstrapVersion) {
+class DvModal {
+    constructor() {
         this.modalEl = null;
         this.contentEl = null;
         this.events = { };
-        this.version = bootstrapVersion;
-        this.modal = null;
+        this.modalBs = null;
     }
     init() {
         document.body.insertAdjacentHTML('beforeend', this.getModalHtml());
@@ -14,9 +13,7 @@ class DvAjaxModal {
         style.appendChild(text);
         this.modalEl = document.getElementById('modal-window');
         this.contentEl = this.modalEl.querySelector('.modal-content');
-        if (this.version >= 4) {
-            this.modal = new Modal(this.modalEl);
-        }
+        this.modalBs = new bootstrap.Modal(this.modalEl);
         this.on('redirect', (response) => { location.href = response.url; });
         this.on('refresh', () => { location.href = location.href.replace(/#.+$/, ''); });
         this.on('html', (response) => {
@@ -26,6 +23,9 @@ class DvAjaxModal {
                 Array.from(oldScript.attributes).forEach( attr => newScript.setAttribute(attr.name, attr.value) );
                 newScript.appendChild(document.createTextNode(oldScript.innerHTML));
                 oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+            Array.from(this.contentEl.querySelectorAll('[data-bs-dismiss="modal"]')).forEach(button => {
+                button.type = 'button';
             });
             this.modalEl.querySelector('.modal-dialog').className = 'modal-dialog ' + (response['modal-size'] ?? '');
             let focusField = this.contentEl.querySelector('.form-focus');
@@ -38,7 +38,19 @@ class DvAjaxModal {
         });
         this.on('error', (response) => {
             this.contentEl.innerHTML = this.getErrorHtml(response['message'] ?? response['error']);
-        })
+        });
+        this.#handleDataSelector();
+    }
+    #handleDataSelector() {
+        document.querySelector('body').addEventListener("click", (e) => {
+            let target = null;
+            if (!e.target) return;
+            target = e.target.matches('[data-dv-toggle="modal"]') ? e.target : e.target.closest('[data-dv-toggle="modal"]');
+            if (!target) return;
+            e.preventDefault();
+            bootstrap.Tooltip.getInstance(target)?.hide();
+            this.onClick(target).then();
+        });
     }
     on(event, action) {
         this.events[event] = action;
@@ -77,20 +89,12 @@ class DvAjaxModal {
     }
     show() {
         return new Promise((resolve => {
-            if (this.version >= 4) {
-                this.modalEl.addEventListener('shown.bs.modal', () => { resolve() }, { once: true });
-                this.modal.show();
-            } else {
-                $(this.modalEl).one('shown.bs.modal', () => { resolve() }).modal('show');
-            }
+            this.modalEl.addEventListener('shown.bs.modal', () => { resolve() }, { once: true });
+            this.modalBs.show();
         }))
     }
     hide() {
-        if (this.version >= 4) {
-            this.modal.hide();
-        } else {
-            $(this.modalEl).modal('hide');
-        }
+        this.modalBs.hide();
     }
     getModalHtml() {
         return '<div id="modal-window" class="modal fade"><div class="modal-dialog"><div class="modal-content"></div></div></div>';

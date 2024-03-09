@@ -1,12 +1,23 @@
 {
-  "name": "dv-ajax-modal",
-  "version": "1.0.0",
+  "name": "@druidvav/modal",
+  "version": "0.9.2",
   "description": "",
+  "homepage": "https://github.com/druidvav/js-ajax-modal",
+  "author": {
+    "name": "Anton Vlasov",
+    "email": "druidvav@gmail.com"
+  },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/druidvav/js-ajax-modal.git"
+    "url": "git://github.com/druidvav/js-ajax-modal.git"
   },
-  "author": "",
-  "license": "MIT",
-  "homepage": "https://github.com/druidvav/js-ajax-modal"
+  "bugs": {
+    "url": "https://github.com/druidvav/js-ajax-modal/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/druidvav/grunt-assets-versioning/blob/master/LICENSE-MIT"
+    }
+  ]
 }
