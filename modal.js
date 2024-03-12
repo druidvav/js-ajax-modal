@@ -106,7 +106,6 @@ class DvModal {
         return '<div style="text-align: center; padding: 20px;"><div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>';
     }
     getErrorHtml(message) {
-        return '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-            '<h4 class="modal-title">Error</h4></div><div class="modal-body">' + message + '</div>';
+        return '<div class="modal-header"><h4 class="modal-title">Error</h4><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">' + message + '</div>';
     }
 }
