@@ -75,13 +75,23 @@ class DvModal {
                 body: params,
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
-            const response = await fetchResponse.json();
-            if (!response || !response.result) {
-                this.events['error']({ message: 'Invalid response' });
-            } else if (this.events[response.result]) {
-                this.events[response.result](response);
+            if (fetchResponse.status === 413) {
+                this.events['error']({
+                    message: 'Request too large. Are you trying to upload very large file?'
+                });
+            } else if (fetchResponse.status > 400) {
+                this.events['error']({
+                    message: fetchResponse.status.toString() + ' ' + fetchResponse.statusText
+                });
             } else {
-                console.log(response);
+                const response = await fetchResponse.json();
+                if (!response || !response.result) {
+                    this.events['error']({ message: 'Invalid response' });
+                } else if (this.events[response.result]) {
+                    this.events[response.result](response);
+                } else {
+                    console.log(response);
+                }
             }
         } catch (err) {
             this.events['error']({ message: err.message });
